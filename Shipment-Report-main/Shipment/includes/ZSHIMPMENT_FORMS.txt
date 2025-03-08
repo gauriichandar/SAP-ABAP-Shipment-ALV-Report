@@ -1,0 +1,186 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZSHIMPMENT_FORMS
+*&---------------------------------------------------------------------*
+
+
+*&---------------------------------------------------------------------*
+*&      Form  GET_DATA
+*&---------------------------------------------------------------------*
+
+FORM GET_DATA.
+
+  IF P_RAD1 = 'X' OR P_RAD2 = 'X' OR P_RAD4 = 'X' OR P_RAD6 = 'X' .
+
+       SELECT
+         VTTP~TKNUM,
+         VTTP~ERDAT,
+         VTTP~VBELN,
+
+         VBRK~NETWR,
+*
+         LIPS~WERKS,
+         LIPS~LGORT,
+         LIPS~MATNR,
+         LIPS~MATWA,
+         LIPS~LFIMG,
+         LIPS~VRKME,
+         LIPS~NTGEW,
+         LIPS~GEWEI,
+         LIPS~VGBEL,
+         LIPS~ERDAT AS LERDAT,
+         LIPS~ERZET AS LERZET,
+*
+         LIKP~WADAT_IST,
+         LIKP~ROUTE,
+         LIKP~VSTEL,
+         LIKP~ERZET,
+         LIKP~KUNAG,
+*
+         VTTK~TEXT1,
+         VTTK~TEXT2,
+         VTTK~TEXT3,
+         VTTK~TEXT4,
+         VTTK~ERNAM,
+         VTTK~AENAM,
+         VTTK~TDLNR
+
+
+    FROM VTTP
+    INNER JOIN LIPS ON VTTP~VBELN = LIPS~VBELN
+    INNER JOIN LIKP ON VTTP~VBELN = LIKP~VBELN
+    INNER JOIN VTTK ON VTTP~TKNUM = VTTK~TKNUM
+    LEFT OUTER JOIN VBRK ON VTTP~VBELN = VBRK~VBELN
+    INTO CORRESPONDING FIELDS OF TABLE @LT_LIST
+    WHERE VTTP~VBELN IN @S_VBELN
+    AND LIPS~WERKS IN @S_WERKS
+    AND VTTP~ERDAT IN @S_ERDAT.
+
+
+    IF SY-SUBRC <> 0.
+      MESSAGE 'No data found' TYPE 'S' DISPLAY LIKE 'E'.
+    ENDIF.
+
+    LOOP AT LT_LIST ASSIGNING FIELD-SYMBOL(<FS_LIST>).
+
+      IF <FS_LIST>-ERDAT < '20050214'.
+      <FS_LIST>-STATUS = 'Old'.
+      <FS_LIST>-COLOR = CV_COLOR_RED_LIGHT. "Red
+      ELSEIF <FS_LIST>-ERDAT BETWEEN '20050215' AND '20100214'.
+      <FS_LIST>-STATUS = 'Temp'.
+      <FS_LIST>-COLOR = CV_COLOR_YELLOW_LIGHT. "Yellow
+      ELSEIF <FS_LIST>-ERDAT > '20100215'.
+      <FS_LIST>-STATUS = 'New'.
+      <FS_LIST>-COLOR = CV_COLOR_GREEN_LIGHT. "Green
+      ENDIF.
+
+    ENDLOOP.
+
+  ELSE.
+
+     SELECT
+         VTTP~TKNUM,
+         VTTP~ERDAT,
+         VTTP~VBELN,
+
+         VBRK~NETWR,
+*
+         LIPS~WERKS,
+         LIPS~LGORT,
+         LIPS~MATNR,
+         LIPS~MATWA,
+         LIPS~LFIMG,
+         LIPS~VRKME,
+         LIPS~NTGEW,
+         LIPS~GEWEI,
+         LIPS~VGBEL,
+         LIPS~ERDAT AS LERDAT,
+         LIPS~ERZET AS LERZET,
+*
+         LIKP~WADAT_IST,
+         LIKP~ROUTE,
+         LIKP~VSTEL,
+         LIKP~ERZET,
+         LIKP~KUNAG,
+*
+         VTTK~TEXT1,
+         VTTK~TEXT2,
+         VTTK~TEXT3,
+         VTTK~TEXT4,
+         VTTK~ERNAM,
+         VTTK~AENAM,
+         VTTK~TDLNR
+
+
+    FROM VTTP
+    INNER JOIN LIPS ON VTTP~VBELN = LIPS~VBELN
+    INNER JOIN LIKP ON VTTP~VBELN = LIKP~VBELN
+    INNER JOIN VTTK ON VTTP~TKNUM = VTTK~TKNUM
+    LEFT OUTER JOIN VBRK ON VTTP~VBELN = VBRK~VBELN
+    INTO CORRESPONDING FIELDS OF TABLE @LT_CSTRUCT
+    WHERE VTTP~VBELN IN @S_VBELN
+    AND LIPS~WERKS IN @S_WERKS.
+
+
+    IF SY-SUBRC <> 0.
+      MESSAGE 'No data found' TYPE 'S' DISPLAY LIKE 'E'.
+    ENDIF.
+
+    LOOP AT LT_CSTRUCT ASSIGNING FIELD-SYMBOL(<FS_LIST2>).
+
+      IF <FS_LIST2>-ERDAT < '20050214'.
+         <FS_LIST2>-STATUS = 'Old'.
+         <FS_LIST2>-COLOR = CV_COLOR_RED_LIGHT. "Red
+      ELSEIF <FS_LIST2>-ERDAT BETWEEN '20050215' AND '20100214'.
+             <FS_LIST2>-STATUS = 'Temp'.
+             <FS_LIST2>-COLOR = CV_COLOR_YELLOW_LIGHT. "Yellow
+      ELSEIF <FS_LIST2>-ERDAT > '20100215'.
+             <FS_LIST2>-STATUS = 'New'.
+             <FS_LIST2>-COLOR = CV_COLOR_GREEN_LIGHT. "Green
+      ENDIF.
+
+    ENDLOOP.
+
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  DISPLAY_DATA
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM DISPLAY_DATA .
+
+    IF P_RAD1 = 'X'.     " manuel field cat
+
+      PERFORM BUILD_FIELDCAT.
+      PERFORM DIPLAY_FIELD_GRID.
+
+    ELSEIF P_RAD2 = 'X'. "Using marcos
+
+      PERFORM BUILD_FIELDCAT_MARCOS.
+      PERFORM DIPLAY_FIELD_GRID.
+
+    ELSEIF P_RAD3 = 'X'. " Using strucutre table type
+
+       PERFORM DISPLAY_STRCUT_GRID.
+
+    ELSEIF P_RAD4 = 'X'. " Using merge  function
+
+        PERFORM BUILDFIELDCAT_USING_MERGE.
+        PERFORM DIPLAY_MERGE_GRID.
+
+    ELSEIF P_RAD5 = 'X'. " Using LVC fun function
+
+      PERFORM BUILD_FIELDCAT_LVC.
+      PERFORM DISPLAY_STRCUT_GRID.
+
+    ELSEIF P_RAD6 = 'X'. "Using marcos
+
+      PERFORM BUILD_FIELDCAT_WITHFORM.
+      PERFORM DIPLAY_FIELD_GRID.
+    ENDIF.
+
+  ENDFORM.

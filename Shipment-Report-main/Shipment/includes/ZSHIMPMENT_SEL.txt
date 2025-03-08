@@ -1,0 +1,112 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZSHIMPMENT_SEL
+*&---------------------------------------------------------------------*
+
+" used in check boxes validation
+  DATA:
+        LV_DATE_LOW TYPE SY-DATUM,
+        LV_DATE_HIGH TYPE SY-DATUM.
+
+SELECTION-SCREEN BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001.
+
+  SELECT-OPTIONS:
+    S_VBELN FOR VTTP-VBELN,           "Delivery Number
+    S_WERKS FOR LIPS-WERKS,           "Plant
+    S_ERDAT FOR VTTP-ERDAT.
+
+SELECTION-SCREEN END OF BLOCK B1.
+
+SELECTION-SCREEN SKIP 1. " skip one line
+
+
+SELECTION-SCREEN BEGIN OF BLOCK B3 WITH FRAME TITLE TEXT-003.
+  PARAMETERS:
+    P_OLD  AS CHECKBOX ,    "Old Records
+    P_TEMP AS CHECKBOX ,    "Temporary Records
+    P_NEW  AS CHECKBOX ,   "New Records
+    P_ALL  AS CHECKBOX DEFAULT 'X'.    "New Records
+SELECTION-SCREEN END OF BLOCK B3.
+
+
+SELECTION-SCREEN BEGIN OF BLOCK B4  WITH FRAME TITLE TEXT-004.
+
+  PARAMETERS: P_RAD1  RADIOBUTTON GROUP GRP1 DEFAULT 'X',
+              P_RAD2  RADIOBUTTON GROUP GRP1,
+              P_RAD3  RADIOBUTTON GROUP GRP1,
+              P_RAD4  RADIOBUTTON GROUP GRP1,
+              P_RAD5  RADIOBUTTON GROUP GRP1,
+              P_RAD6  RADIOBUTTON GROUP GRP1.
+
+SELECTION-SCREEN END OF BLOCK B4.
+
+" validation in check boxes
+AT SELECTION-SCREEN.
+
+  IF P_ALL = 'X'.
+    IF P_OLD = 'X' OR P_TEMP = 'X' OR P_NEW = 'X'.
+      MESSAGE 'Cannot select status when "All" is selected'
+        TYPE 'E'.
+    ENDIF.
+  ENDIF.
+
+
+* First clear all variables and ranges
+  CLEAR: LV_DATE_LOW, LV_DATE_HIGH.
+  REFRESH S_ERDAT.
+  CLEAR S_ERDAT.
+
+  CASE ABAP_TRUE.
+    WHEN P_OLD.
+      LV_DATE_LOW = '20050214'.
+
+      S_ERDAT-SIGN   = 'I'.
+      S_ERDAT-OPTION = 'LE'.
+      S_ERDAT-LOW    = LV_DATE_LOW.
+      APPEND S_ERDAT.
+
+      CLEAR: S_ERDAT, LV_DATE_LOW.
+
+    WHEN P_TEMP.
+      LV_DATE_LOW  = '20050215'.
+      LV_DATE_HIGH = '20100214'.
+
+      S_ERDAT-SIGN   = 'I'.
+      S_ERDAT-OPTION = 'BT'.
+      S_ERDAT-LOW    = LV_DATE_LOW.
+      S_ERDAT-HIGH   = LV_DATE_HIGH.
+      APPEND S_ERDAT.
+
+      CLEAR: S_ERDAT, LV_DATE_LOW, LV_DATE_HIGH.
+
+    WHEN P_NEW.
+      LV_DATE_LOW = '20100215'.
+
+      S_ERDAT-SIGN   = 'I'.
+      S_ERDAT-OPTION = 'GE'.
+      S_ERDAT-LOW    = LV_DATE_LOW.
+      APPEND S_ERDAT.
+
+      CLEAR: S_ERDAT, LV_DATE_LOW.
+
+    WHEN P_ALL.
+      REFRESH S_ERDAT.
+  ENDCASE.
+
+
+" add validation on s_vbeln
+AT SELECTION-SCREEN ON s_vbeln.
+
+  IF s_vbeln-low is NOT INITIAL and s_vbeln-high is NOT INITIAL.
+    IF s_vbeln-low > s_vbeln-high.
+      MESSAGE 'Lower limit cannot be greater than upper limit' TYPE 'E'.
+    ENDIF.
+  ENDIF.
+
+" add validation on S_ERDAT
+AT SELECTION-SCREEN ON S_ERDAT.
+
+  IF S_ERDAT-low is NOT INITIAL or S_ERDAT-high is NOT INITIAL.
+    IF S_ERDAT-low > sy-DATUM  or S_ERDAT-high > sy-DATUM.
+      MESSAGE 'Dates can not be in the future..' TYPE 'E'.
+    ENDIF.
+  ENDIF.

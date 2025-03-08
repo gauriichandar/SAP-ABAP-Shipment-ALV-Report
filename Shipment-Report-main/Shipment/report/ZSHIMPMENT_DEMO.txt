@@ -1,0 +1,30 @@
+*&---------------------------------------------------------------------*
+*& Report ZSHIMPMENT_DEMO
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZSHIMPMENT_DEMO.
+
+
+DATA: LV_TKNUM TYPE VTTP-TKNUM,
+      MSG_STR(50).
+
+
+
+INITIALIZATION.
+  GET PARAMETER ID 'DFD' FIELD LV_TKNUM.
+
+
+START-OF-SELECTION.
+
+IF LV_TKNUM IS INITIAL.
+
+  MESSAGE 'no value' TYPE 'I'.
+
+ELSE.
+
+  SELECT * from vttp INTO TABLE @DATA(lt_vttp) where TKNUM = @LV_TKNUM.
+
+  CL_DEMO_OUTPUT=>display( lt_vttp ).
+
+ENDIF.

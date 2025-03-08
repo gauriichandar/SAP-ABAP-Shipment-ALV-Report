@@ -1,0 +1,22 @@
+FUNCTION ZSHIPMENT_DANDT.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     REFERENCE(DATE) TYPE  DATS DEFAULT SY-DATUM
+*"     REFERENCE(TIME) TYPE  T DEFAULT SY-UZEIT
+*"  EXPORTING
+*"     REFERENCE(E_DATE) TYPE  CHAR10
+*"     REFERENCE(E_TIME) TYPE  CHAR10
+*"----------------------------------------------------------------------
+
+
+
+  CONCATENATE SY-DATUM+6(2) SY-DATUM+4(2) SY-DATUM+0(4)
+  INTO E_DATE SEPARATED BY '/'.
+
+ CONCATENATE  SY-UZEIT+0(2) SY-UZEIT+2(2)
+ INTO E_TIME SEPARATED BY ':'.
+
+
+
+ENDFUNCTION.

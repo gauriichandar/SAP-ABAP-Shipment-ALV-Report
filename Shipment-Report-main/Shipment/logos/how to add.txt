@@ -1,0 +1,5 @@
+from => oaer
+
+Class name pictures
+Class type ot
+Object key ZSHIPMENTLOGO

@@ -1,0 +1,78 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZSHIMPMENT_DATAIN
+*&---------------------------------------------------------------------*
+
+" define tables used in select-options
+TABLES: vttp, lips, likp, vttk, vbrk.
+
+" structure
+TYPES: BEGIN OF TP_LIST,
+        TKNUM       TYPE VTTP-TKNUM,
+        ERDAT       TYPE VTTP-ERDAT,
+        VBELN       TYPE VTTP-VBELN,
+
+        NETWR       TYPE VBRK-NETWR ,
+
+        WERKS       TYPE LIPS-WERKS,
+        LGORT       TYPE LIPS-LGORT ,
+        MATNR       TYPE LIPS-MATNR ,
+        MATWA       TYPE LIPS-MATWA ,
+        LFIMG       TYPE LIPS-LFIMG ,
+        VRKME       TYPE LIPS-VRKME ,
+        NTGEW       TYPE LIPS-NTGEW ,
+        GEWEI       TYPE LIPS-GEWEI ,
+        VGBEL       TYPE LIPS-VGBEL ,
+        LERDAT      TYPE LIPS-ERDAT ,
+        LERZET      TYPE LIPS-ERZET ,
+
+        WADAT_IST  TYPE LIKP-WADAT_IST,
+        ROUTE      TYPE LIKP-ROUTE,
+        VSTEL      TYPE LIKP-VSTEL,
+        ERZET      TYPE LIKP-ERZET ,
+        KUNAG      TYPE LIKP-KUNAG ,
+
+        TEXT1      TYPE VTTK-TEXT1 ,
+        TEXT2      TYPE VTTK-TEXT2 ,
+        TEXT3      TYPE VTTK-TEXT3,
+        TEXT4      TYPE VTTK-TEXT4,
+        ERNAM      TYPE VTTK-ERNAM ,
+        AENAM      TYPE VTTK-AENAM ,
+        TDLNR      TYPE VTTK-TDLNR ,
+        STATUS(10),
+        COLOR      TYPE CHAR4,
+
+        END OF TP_LIST.
+
+  " using in field cat, marcos
+  DATA: LT_LIST TYPE STANDARD TABLE OF TP_LIST,
+        LS_LIST TYPE  TP_LIST.
+  DATA: GT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV,
+        GS_FIELDCAT TYPE SLIS_FIELDCAT_ALV,
+        GS_LAYOUT TYPE   SLIS_LAYOUT_ALV,
+        IT_LISTHEADER TYPE SLIS_T_LISTHEADER,
+        WA_LISTHEADER TYPE SLIS_LISTHEADER,
+        IT_EXCLUDING TYPE	SLIS_T_EXTAB,
+        WA_EXCLUDING TYPE	SLIS_EXTAB,
+        CUR_POS TYPE I.
+
+   " when using strucute
+  DATA: LT_CSTRUCT TYPE TABLE OF ZSHIPMENT_STRUCT,
+         LS_CSTRUCT TYPE ZSHIPMENT_STRUCT.
+
+   "when using lvc
+  DATA: GT_FCAT TYPE LVC_T_FCAT.
+
+  " handle layout
+  GS_LAYOUT-INFO_FIELDNAME = 'COLOR'.
+  GS_LAYOUT-COLWIDTH_OPTIMIZE = 'X'.   " Optimize column width
+  GS_LAYOUT-ZEBRA = 'X'.
+
+  "in function module => ZSHIPMENT_DANDT
+  DATA: lv_date TYPE char10,
+        lv_time TYPE char10.
+
+  "to add colors to alv report
+  CONSTANTS:
+    CV_COLOR_RED_LIGHT    TYPE CHAR4 VALUE 'C600',
+    CV_COLOR_YELLOW_LIGHT TYPE CHAR4 VALUE 'C310',
+    CV_COLOR_GREEN_LIGHT  TYPE CHAR4 VALUE 'C510'.

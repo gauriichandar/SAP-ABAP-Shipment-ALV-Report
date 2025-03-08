@@ -1,0 +1,658 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZSHIMPMENT_FC
+*&---------------------------------------------------------------------*
+
+*&---------------------------------------------------------------------*
+*& Form BUILD_FIELDCAT_WITHFORM
+*& using form and sub form
+*&---------------------------------------------------------------------*
+FORM BUILD_FIELDCAT_WITHFORM.
+  CLEAR: GT_FIELDCAT, GS_FIELDCAT.
+
+  PERFORM ADD_FIELD_WITHFORM USING:
+    "Pos  Fieldname    Long Text                    Medium Text      Short Text   Key  Hot  Sum
+    "---- ------------ ---------------------------- ---------------- ------------ ---- ---- ---
+     1    'TKNUM'      'Shipment Number'            'Shipment No'    'Ship No'    'X'  'X'  '',
+     2    'ERDAT'      'Shipment Creation Date'     'Creation Date'  'Cre.Date'   ''   ''   '',
+     3    'VBELN'      'Delivery Document'          'Delivery'       'Del.'       ''   ''   '',
+     4    'NETWR'      'Net Value'                  'Net Value'      'Value'      ''   ''   'X',
+     5    'WERKS'      'Plant'                      'Plant'          'Plant'      ''   ''   '',
+     6    'LGORT'      'Storage Location'           'Storage Loc'    'Stor.Loc'   ''   ''   '',
+     7    'MATNR'      'Material Number'            'Material'       'Mat.'       ''   ''   '',
+     8    'MATWA'      'Material Description'       'Mat. Desc'      'Mat.Desc'   ''   ''   '',
+     9    'LFIMG'      'Delivery Quantity'          'Del. Qty'       'Qty'        ''   ''   'X',
+     10   'VRKME'      'Sales Unit'                 'Sales Unit'     'Unit'       ''   ''   '',
+     11   'NTGEW'      'Net Weight'                 'Net Weight'     'Net Wt'     ''   ''   'X',
+     12   'GEWEI'      'Weight Unit'                'Weight Unit'    'Wt Unit'    ''   ''   '',
+     13   'VGBEL'      'Reference Document'         'Reference'      'Ref.'       ''   ''   '',
+     14   'LERDAT'     'Delivery Creation Date'     'Del.Cre.Date'   'Del.Date'   ''   ''   '',
+     15   'LERZET'     'Delivery Creation Time'     'Del.Cre.Time'   'Del.Time'   ''   ''   '',
+     16   'WADAT_IST'  'Actual Goods Movement Date' 'Actual GI Date' 'GI Date'    ''   ''   '',
+     17   'ROUTE'      'Route'                      'Route'          'Route'      ''   ''   '',
+     18   'VSTEL'      'Shipping Point'             'Ship Point'     'ShipPt'     ''   ''   '',
+     19   'ERZET'      'Creation Time'              'Create Time'    'Cre.Time'   ''   ''   '',
+     20   'KUNAG'      'Sold-to Party'              'Sold-to'        'Sold-to'    ''   ''   '',
+     21   'TEXT1'      'Shipment Text 1'            'Text 1'         'Text1'      ''   ''   '',
+     22   'TEXT2'      'Shipment Text 2'            'Text 2'         'Text2'      ''   ''   '',
+     23   'TEXT3'      'Shipment Text 3'            'Text 3'         'Text3'      ''   ''   '',
+     24   'TEXT4'      'Shipment Text 4'            'Text 4'         'Text4'      ''   ''   '',
+     25   'ERNAM'      'Created By'                 'Created By'     'Created'    ''   ''   '',
+     26   'AENAM'      'Changed By'                 'Changed By'     'Changed'    ''   ''   '',
+     27   'TDLNR'      'Carrier'                    'Carrier'        'Carrier'    ''   ''   '',
+     28   'STATUS'     'Status'                     'Status'         'Status'     ''   ''   ''.
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form ADD_FIELD_WITHFORM
+*&---------------------------------------------------------------------*
+FORM ADD_FIELD_WITHFORM USING P_POS
+                     P_FIELDNAME
+                     P_SELTEXT_L
+                     P_SELTEXT_M
+                     P_SELTEXT_S
+                     P_KEY
+                     P_HOTSPOT
+                     P_DO_SUM.
+
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = P_POS.
+  GS_FIELDCAT-FIELDNAME = P_FIELDNAME.
+  GS_FIELDCAT-SELTEXT_L = P_SELTEXT_L.
+  GS_FIELDCAT-SELTEXT_M = P_SELTEXT_M.
+  GS_FIELDCAT-SELTEXT_S = P_SELTEXT_S.
+  GS_FIELDCAT-KEY       = P_KEY.
+  GS_FIELDCAT-HOTSPOT   = P_HOTSPOT.
+  GS_FIELDCAT-DO_SUM    = P_DO_SUM.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form BUILD_FIELDCAT
+*& using manuel way
+*&---------------------------------------------------------------------*
+
+FORM BUILD_FIELDCAT.
+
+  CLEAR: GT_FIELDCAT, GS_FIELDCAT, CUR_POS.
+
+* Shipment Number
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'TKNUM'.
+  GS_FIELDCAT-SELTEXT_L = 'Shipment Number'.
+  GS_FIELDCAT-SELTEXT_M = 'Shipment No'.
+  GS_FIELDCAT-SELTEXT_S = 'Ship No'.
+  GS_FIELDCAT-KEY      = 'X'.
+  GS_FIELDCAT-HOTSPOT  = 'X'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Shipment Creation Date
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'ERDAT'.
+  GS_FIELDCAT-SELTEXT_L = 'Shipment Creation Date'.
+  GS_FIELDCAT-SELTEXT_M = 'Creation Date'.
+  GS_FIELDCAT-SELTEXT_S = 'Cre.Date'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Delivery Document
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'VBELN'.
+  GS_FIELDCAT-SELTEXT_L = 'Delivery Document'.
+  GS_FIELDCAT-SELTEXT_M = 'Delivery'.
+  GS_FIELDCAT-SELTEXT_S = 'Del.'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Net Value
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'NETWR'.
+  GS_FIELDCAT-SELTEXT_L = 'Net Value'.
+  GS_FIELDCAT-SELTEXT_M = 'Net Value'.
+  GS_FIELDCAT-SELTEXT_S = 'Value'.
+  GS_FIELDCAT-DO_SUM   = 'X'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Plant
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'WERKS'.
+  GS_FIELDCAT-SELTEXT_L = 'Plant'.
+  GS_FIELDCAT-SELTEXT_M = 'Plant'.
+  GS_FIELDCAT-SELTEXT_S = 'Plant'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Storage Location
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'LGORT'.
+  GS_FIELDCAT-SELTEXT_L = 'Storage Location'.
+  GS_FIELDCAT-SELTEXT_M = 'Storage Loc'.
+  GS_FIELDCAT-SELTEXT_S = 'Stor.Loc'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Material Number
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'MATNR'.
+  GS_FIELDCAT-SELTEXT_L = 'Material Number'.
+  GS_FIELDCAT-SELTEXT_M = 'Material'.
+  GS_FIELDCAT-SELTEXT_S = 'Mat.'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Material Description
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'MATWA'.
+  GS_FIELDCAT-SELTEXT_L = 'Material Description'.
+  GS_FIELDCAT-SELTEXT_M = 'Mat. Desc'.
+  GS_FIELDCAT-SELTEXT_S = 'Mat.Desc'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Delivery Quantity
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'LFIMG'.
+  GS_FIELDCAT-SELTEXT_L = 'Delivery Quantity'.
+  GS_FIELDCAT-SELTEXT_M = 'Del. Qty'.
+  GS_FIELDCAT-SELTEXT_S = 'Qty'.
+  GS_FIELDCAT-DO_SUM   = 'X'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Sales Unit
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'VRKME'.
+  GS_FIELDCAT-SELTEXT_L = 'Sales Unit'.
+  GS_FIELDCAT-SELTEXT_M = 'Sales Unit'.
+  GS_FIELDCAT-SELTEXT_S = 'Unit'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Net Weight
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'NTGEW'.
+  GS_FIELDCAT-SELTEXT_L = 'Net Weight'.
+  GS_FIELDCAT-SELTEXT_M = 'Net Weight'.
+  GS_FIELDCAT-SELTEXT_S = 'Net Wt'.
+  GS_FIELDCAT-DO_SUM   = 'X'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Weight Unit
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'GEWEI'.
+  GS_FIELDCAT-SELTEXT_L = 'Weight Unit'.
+  GS_FIELDCAT-SELTEXT_M = 'Weight Unit'.
+  GS_FIELDCAT-SELTEXT_S = 'Wt Unit'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Reference Document
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'VGBEL'.
+  GS_FIELDCAT-SELTEXT_L = 'Reference Document'.
+  GS_FIELDCAT-SELTEXT_M = 'Reference'.
+  GS_FIELDCAT-SELTEXT_S = 'Ref.'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Delivery Creation Date
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'LERDAT'.
+  GS_FIELDCAT-SELTEXT_L = 'Delivery Creation Date'.
+  GS_FIELDCAT-SELTEXT_M = 'Del.Cre.Date'.
+  GS_FIELDCAT-SELTEXT_S = 'Del.Date'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Delivery Creation Time
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'LERZET'.
+  GS_FIELDCAT-SELTEXT_L = 'Delivery Creation Time'.
+  GS_FIELDCAT-SELTEXT_M = 'Del.Cre.Time'.
+  GS_FIELDCAT-SELTEXT_S = 'Del.Time'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Actual Goods Movement Date
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'WADAT_IST'.
+  GS_FIELDCAT-SELTEXT_L = 'Actual Goods Movement Date'.
+  GS_FIELDCAT-SELTEXT_M = 'Actual GI Date'.
+  GS_FIELDCAT-SELTEXT_S = 'GI Date'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Route
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'ROUTE'.
+  GS_FIELDCAT-SELTEXT_L = 'Route'.
+  GS_FIELDCAT-SELTEXT_M = 'Route'.
+  GS_FIELDCAT-SELTEXT_S = 'Route'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Shipping Point
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'VSTEL'.
+  GS_FIELDCAT-SELTEXT_L = 'Shipping Point'.
+  GS_FIELDCAT-SELTEXT_M = 'Ship Point'.
+  GS_FIELDCAT-SELTEXT_S = 'ShipPt'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Creation Time
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'ERZET'.
+  GS_FIELDCAT-SELTEXT_L = 'Creation Time'.
+  GS_FIELDCAT-SELTEXT_M = 'Create Time'.
+  GS_FIELDCAT-SELTEXT_S = 'Cre.Time'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Sold-to Party
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'KUNAG'.
+  GS_FIELDCAT-SELTEXT_L = 'Sold-to Party'.
+  GS_FIELDCAT-SELTEXT_M = 'Sold-to'.
+  GS_FIELDCAT-SELTEXT_S = 'Sold-to'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Text1
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'TEXT1'.
+  GS_FIELDCAT-SELTEXT_L = 'Shipment Text 1'.
+  GS_FIELDCAT-SELTEXT_M = 'Text 1'.
+  GS_FIELDCAT-SELTEXT_S = 'Text1'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Text2
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'TEXT2'.
+  GS_FIELDCAT-SELTEXT_L = 'Shipment Text 2'.
+  GS_FIELDCAT-SELTEXT_M = 'Text 2'.
+  GS_FIELDCAT-SELTEXT_S = 'Text2'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Text3
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'TEXT3'.
+  GS_FIELDCAT-SELTEXT_L = 'Shipment Text 3'.
+  GS_FIELDCAT-SELTEXT_M = 'Text 3'.
+  GS_FIELDCAT-SELTEXT_S = 'Text3'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Text4
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'TEXT4'.
+  GS_FIELDCAT-SELTEXT_L = 'Shipment Text 4'.
+  GS_FIELDCAT-SELTEXT_M = 'Text 4'.
+  GS_FIELDCAT-SELTEXT_S = 'Text4'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Created By
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'ERNAM'.
+  GS_FIELDCAT-SELTEXT_L = 'Created By'.
+  GS_FIELDCAT-SELTEXT_M = 'Created By'.
+  GS_FIELDCAT-SELTEXT_S = 'Created'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Changed By
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'AENAM'.
+  GS_FIELDCAT-SELTEXT_L = 'Changed By'.
+  GS_FIELDCAT-SELTEXT_M = 'Changed By'.
+  GS_FIELDCAT-SELTEXT_S = 'Changed'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+* Carrier
+  CUR_POS = CUR_POS + 1.
+  CLEAR GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS   = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'TDLNR'.
+  GS_FIELDCAT-SELTEXT_L = 'Carrier'.
+  GS_FIELDCAT-SELTEXT_M = 'Carrier'.
+  GS_FIELDCAT-SELTEXT_S = 'Carrier'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+  CUR_POS = CUR_POS + 1.
+  CLEAR: GS_FIELDCAT.
+  GS_FIELDCAT-COL_POS = CUR_POS.
+  GS_FIELDCAT-FIELDNAME = 'STATUS'.
+  GS_FIELDCAT-SELTEXT_L = 'Status'.
+  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form BUILD_FIELDCAT_LVC
+*& using LVC
+*&---------------------------------------------------------------------*
+
+FORM BUILD_FIELDCAT_LVC.
+
+      CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+        EXPORTING
+          I_STRUCTURE_NAME = 'ZSHIPMENT_STRUCT'
+        CHANGING
+          CT_FIELDCAT      = GT_FCAT
+        EXCEPTIONS
+          INCONSISTENT_INTERFACE = 1
+          PROGRAM_ERROR          = 2
+          OTHERS                 = 3.
+
+      IF SY-SUBRC <> 0.
+        MESSAGE 'Error generating field catalog' TYPE 'E'.
+      ENDIF.
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form BUILD_FIELDCAT_MARCOS
+*& using MARCOS
+*&---------------------------------------------------------------------*
+
+FORM BUILD_FIELDCAT_MARCOS.
+
+  DEFINE ADD_FIELD.
+  CLEAR gs_fieldcat.
+  gs_fieldcat-col_pos   = &1.
+  gs_fieldcat-fieldname = &2.
+  gs_fieldcat-seltext_l = &3.
+  gs_fieldcat-seltext_m = &4.
+  gs_fieldcat-seltext_s = &5.
+  gs_fieldcat-key      = &6.
+  gs_fieldcat-hotspot  = &7.
+  GS_FIELDCAT-DO_SUM   = &8.
+  APPEND gs_fieldcat TO gt_fieldcat.
+  END-OF-DEFINITION.
+
+
+  CLEAR: GT_FIELDCAT, GS_FIELDCAT, CUR_POS.
+
+  " Add fields using the macro
+  ADD_FIELD 1 'TKNUM' 'Shipment Number' 'Shipment No' 'Ship No' 'X' 'X' ''.
+  ADD_FIELD 2 'ERDAT' 'Shipment Creation Date' 'Creation Date' 'Cre.Date' '' '' ''.
+  ADD_FIELD 3 'VBELN' 'Delivery Document' 'Delivery' 'Del.' '' '' ''.
+  ADD_FIELD 4 'NETWR' 'Net Value' 'Net Value' 'Value' '' '' 'X'.
+  ADD_FIELD 5 'WERKS' 'Plant' 'Plant' 'Plant' '' '' ''.
+  ADD_FIELD 6 'LGORT' 'Storage Location' 'Storage Loc' 'Stor.Loc' '' '' ''.
+  ADD_FIELD 7 'MATNR' 'Material Number' 'Material' 'Mat.' '' '' ''.
+  ADD_FIELD 8 'MATWA' 'Material Description' 'Mat. Desc' 'Mat.Desc' '' '' ''.
+  ADD_FIELD 9 'LFIMG' 'Delivery Quantity' 'Del. Qty' 'Qty' '' '' 'X'.
+  ADD_FIELD 10 'VRKME' 'Sales Unit' 'Sales Unit' 'Unit' '' '' ''.
+  ADD_FIELD 11 'NTGEW' 'Net Weight' 'Net Weight' 'Net Wt' '' '' 'X'.
+  ADD_FIELD 12 'GEWEI' 'Weight Unit' 'Weight Unit' 'Wt Unit' '' '' ''.
+  ADD_FIELD 13 'VGBEL' 'Reference Document' 'Reference' 'Ref.' '' '' ''.
+  ADD_FIELD 14 'LERDAT' 'Delivery Creation Date' 'Del.Cre.Date' 'Del.Date' '' '' ''.
+  ADD_FIELD 15 'LERZET' 'Delivery Creation Time' 'Del.Cre.Time' 'Del.Time' '' '' ''.
+  ADD_FIELD 16 'WADAT_IST' 'Actual Goods Movement Date' 'Actual GI Date' 'GI Date' '' '' ''.
+  ADD_FIELD 17 'ROUTE' 'Route' 'Route' 'Route' '' '' ''.
+  ADD_FIELD 18 'VSTEL' 'Shipping Point' 'Ship Point' 'ShipPt' '' '' ''.
+  ADD_FIELD 19 'ERZET' 'Creation Time' 'Create Time' 'Cre.Time' '' '' ''.
+  ADD_FIELD 20 'KUNAG' 'Sold-to Party' 'Sold-to' 'Sold-to' '' '' ''.
+  ADD_FIELD 21 'TEXT1' 'Shipment Text 1' 'Text 1' 'Text1' '' '' ''.
+  ADD_FIELD 22 'TEXT2' 'Shipment Text 2' 'Text 2' 'Text2' '' '' ''.
+  ADD_FIELD 23 'TEXT3' 'Shipment Text 3' 'Text 3' 'Text3' '' '' ''.
+  ADD_FIELD 24 'TEXT4' 'Shipment Text 4' 'Text 4' 'Text4' '' '' ''.
+  ADD_FIELD 25 'ERNAM' 'Created By' 'Created By' 'Created' '' '' ''.
+  ADD_FIELD 26 'AENAM' 'Changed By' 'Changed By' 'Changed' '' '' ''.
+  ADD_FIELD 27 'TDLNR' 'Carrier' 'Carrier' 'Carrier' '' '' ''.
+  ADD_FIELD 28 'STATUS' 'Status' '' '' '' '' ''.
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form BUILDFIELDCAT_USING_MERGE
+*& using function REUSE_ALV_FIELDCATALOG_MERGE
+*&---------------------------------------------------------------------*
+
+FORM BUILDFIELDCAT_USING_MERGE.
+
+  CALL FUNCTION 'REUSE_ALV_FIELDCATALOG_MERGE'
+  EXPORTING
+    I_PROGRAM_NAME     = SY-REPID
+    I_STRUCTURE_NAME   = 'ZSHIPMENT_STRUCT'  " Your structure name
+  CHANGING
+    CT_FIELDCAT        = GT_FIELDCAT
+  EXCEPTIONS
+    INCONSISTENT_INTERFACE = 1
+    PROGRAM_ERROR          = 2
+    OTHERS                 = 3.
+
+  IF SY-SUBRC <> 0.
+    MESSAGE 'Error generating field catalog' TYPE 'E'.
+  ENDIF.
+
+  " add sum features to specific field catalog
+  LOOP AT GT_FIELDCAT ASSIGNING FIELD-SYMBOL(<FS_FIELDCAT>).
+    CASE <FS_FIELDCAT>-FIELDNAME.
+      WHEN 'TKNUM'.
+        <FS_FIELDCAT>-KEY     = 'X'.
+        <FS_FIELDCAT>-HOTSPOT = 'X'.
+        MODIFY GT_FIELDCAT FROM <FS_FIELDCAT>.
+
+      WHEN 'NETWR'.
+        <FS_FIELDCAT>-DO_SUM = 'X'.
+        MODIFY GT_FIELDCAT FROM <FS_FIELDCAT>.
+
+      WHEN 'LFIMG'.
+        <FS_FIELDCAT>-DO_SUM = 'X'.
+        MODIFY GT_FIELDCAT FROM <FS_FIELDCAT>.
+
+      WHEN 'NTGEW'.
+        <FS_FIELDCAT>-DO_SUM = 'X'.
+        MODIFY GT_FIELDCAT FROM <FS_FIELDCAT>.
+    ENDCASE.
+  ENDLOOP.
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form DIPLAY_FIELD_GRID
+*& used for -- BUILD_FIELDCAT_WITHFORM -- BUILD_FIELDCAT -- BUILD_FIELDCAT_MARCOS
+*&---------------------------------------------------------------------*
+
+FORM DIPLAY_FIELD_GRID.
+
+   CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      I_CALLBACK_PROGRAM      = SY-REPID
+      I_CALLBACK_USER_COMMAND = 'USER_COMMAND'  " User Command Handling
+      I_CALLBACK_PF_STATUS_SET = 'PF_STATUS'
+      IT_FIELDCAT            = GT_FIELDCAT
+      I_HTML_HEIGHT_TOP = 15
+      I_GRID_TITLE = 'Shipment Details'
+      IS_LAYOUT              = GS_LAYOUT
+      I_SAVE                 = 'A'  "'X' = Only Layout, 'U' = User-specific, 'A' = All layout settings
+      I_CALLBACK_TOP_OF_PAGE = 'TOP_OF_PAGE'
+    TABLES
+      T_OUTTAB               = LT_LIST
+    EXCEPTIONS
+      PROGRAM_ERROR          = 1
+      OTHERS                 = 2.
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form DIPLAY_MERGE_GRID
+*& used for -- BUILDFIELDCAT_USING_MERGE
+*&---------------------------------------------------------------------*
+
+FORM DIPLAY_MERGE_GRID.
+
+    "Display ALV with error handling
+   CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      I_CALLBACK_PROGRAM      = SY-REPID
+      I_CALLBACK_USER_COMMAND = 'USER_COMMAND'  " User Command Handling
+      I_STRUCTURE_NAME       = 'ZSHIPMENT_STRUCT'
+      IT_FIELDCAT            = GT_FIELDCAT
+      I_HTML_HEIGHT_TOP = 15
+      I_GRID_TITLE = 'Shipment Details'
+      IS_LAYOUT              = GS_LAYOUT
+      I_SAVE                 = 'A'  "'X' = Only Layout, 'U' = User-specific, 'A' = All layout settings
+      I_CALLBACK_TOP_OF_PAGE = 'TOP_OF_PAGE'
+    TABLES
+      T_OUTTAB               = LT_LIST
+    EXCEPTIONS
+      PROGRAM_ERROR          = 1
+      OTHERS                 = 2.
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form DISPLAY_STRCUT_GRID
+*& used for  DDIC structrue table
+*&---------------------------------------------------------------------*
+
+FORM DISPLAY_STRCUT_GRID.
+
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+  EXPORTING
+    I_CALLBACK_PROGRAM     = SY-REPID
+    I_CALLBACK_USER_COMMAND = 'USER_COMMAND'
+    I_STRUCTURE_NAME       = 'ZSHIPMENT_STRUCT'
+
+    I_HTML_HEIGHT_TOP = 15
+    I_GRID_TITLE = 'Shipment Details'
+    IS_LAYOUT              = GS_LAYOUT
+    I_SAVE                 = 'A'  "'X' = Only Layout, 'U' = User-specific, 'A' = All layout settings
+    I_CALLBACK_TOP_OF_PAGE = 'TOP_OF_PAGE'
+  TABLES
+    T_OUTTAB               = LT_CSTRUCT
+  EXCEPTIONS
+    PROGRAM_ERROR          = 1
+    OTHERS                 = 2.
+
+  IF SY-SUBRC <> 0.
+    MESSAGE 'Error when displaying data' TYPE 'E'.
+  ENDIF.
+
+ENDFORM.
+
+
+*&---------------------------------------------------------------------*
+*& Form USER_COMMAND
+*& ** Handling User Actions **
+*&---------------------------------------------------------------------*
+
+FORM USER_COMMAND USING R_UCOMM TYPE SY-UCOMM
+                        RS_SELFIELD TYPE SLIS_SELFIELD.
+
+*  BREAK-POINT .
+
+  CASE R_UCOMM.
+
+    WHEN '&IC1'. " handle double click event
+
+
+      IF LT_LIST[] IS NOT INITIAL.
+         READ TABLE LT_LIST INTO LS_LIST INDEX RS_SELFIELD-TABINDEX . " get row which i clicked on
+         SET PARAMETER ID 'DFD' FIELD  LS_LIST-TKNUM . "send to call TRANSACTION
+      ELSEIF LT_CSTRUCT[] IS NOT INITIAL.
+         READ TABLE LT_CSTRUCT INTO LS_CSTRUCT INDEX RS_SELFIELD-TABINDEX . " get row which i clicked on
+         SET PARAMETER ID 'DFD' FIELD  LS_CSTRUCT-TKNUM . "send to call TRANSACTION
+      ENDIF.
+
+      CALL TRANSACTION 'ZSHIMPMENT_DEMO' AND SKIP FIRST SCREEN. " open me23n and skip screen
+
+    WHEN '&PRT'.
+
+      MESSAGE 'you are trying to print' TYPE 'I' .
+
+  ENDCASE.
+
+ENDFORM .
+
+FORM PF_STATUS USING IT_EXC TYPE SLIS_T_EXTAB.
+
+  " to remove somr icons from toolbar.
+  APPEND '&CRE' TO IT_EXC.
+  APPEND '&CRB ' TO IT_EXC.
+  APPEND '&CRL ' TO IT_EXC.
+  APPEND '&CRR ' TO IT_EXC.
+
+  SET PF-STATUS 'ZPF_COPY' EXCLUDING IT_EXC.
+
+ENDFORM.
+
+
+FORM TOP_OF_PAGE.
+
+  CALL FUNCTION 'ZSHIPMENT_DANDT'
+   EXPORTING
+     DATE          = SY-DATUM
+     TIME          = SY-UZEIT
+   IMPORTING
+     E_DATE        = LV_DATE
+     E_TIME        = LV_TIME.
+
+
+  CLEAR: IT_LISTHEADER,  WA_LISTHEADER.
+*   build header details
+  WA_LISTHEADER-TYP = 'H'.
+  WA_LISTHEADER-INFO = 'Shipment Report.'.
+  APPEND WA_LISTHEADER TO IT_LISTHEADER.
+  CLEAR: WA_LISTHEADER.
+
+  WA_LISTHEADER-TYP = 'S'.
+  WA_LISTHEADER-KEY = 'Date : '.
+  WA_LISTHEADER-INFO = LV_DATE.
+  APPEND WA_LISTHEADER TO IT_LISTHEADER.
+  CLEAR: WA_LISTHEADER.
+
+  WA_LISTHEADER-TYP = 'S'.
+  WA_LISTHEADER-KEY = 'Time : '.
+  WA_LISTHEADER-INFO = LV_TIME.
+  APPEND WA_LISTHEADER TO IT_LISTHEADER.
+  CLEAR: WA_LISTHEADER.
+
+
+
+CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+  EXPORTING
+    IT_LIST_COMMENTARY       = IT_LISTHEADER
+    I_LOGO                 = 'ZSHIPMENTLOGO'.
+*   I_END_OF_LIST_GRID       = 'X'.
+*   I_ALV_FORM               =
+
+ENDFORM.

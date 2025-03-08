@@ -1,0 +1,19 @@
+*&---------------------------------------------------------------------*
+*& Report ZSHIMPMENT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZSHIMPMENT.
+
+INCLUDE ZSHIMPMENT_DATAIN. " structure, tables and data types
+INCLUDE ZSHIMPMENT_SEL.    " selection screen design
+INCLUDE ZSHIMPMENT_FC.     " all ways to generate feild catalogs
+INCLUDE ZSHIMPMENT_FORMS.  " all forms with START-OF-SELECTION
+
+
+START-OF-SELECTION.
+
+PERFORM GET_DATA.
+PERFORM DISPLAY_DATA.
+
+END-OF-SELECTION.
